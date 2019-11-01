@@ -10,8 +10,10 @@ def create_parser():
                              'respectively', default=True)
     parser.add_argument('-m3', action='store_true', help='Specify -start -steps -step -repeat')
 
-    parser.add_argument('-a', help='A is the length of horizontal side', default=random.randint(10, 50))
-    parser.add_argument('-b', help='B is the length of vertical side', default=random.randint(10, 50))
-    parser.add_argument('-p', help='P is number of points inside the rectangle', default=random.randint(10, 20))
+    parser.add_argument('-a', help='A is the length of horizontal side', default=7)
+    # parser.add_argument('-a', help='A is the length of horizontal side', default=random.randint(5, 7))
+    parser.add_argument('-b', help='B is the length of vertical side', default=7)
+    # parser.add_argument('-b', help='B is the length of vertical side', default=random.randint(5, 6))
+    parser.add_argument('-p', help='P is number of points inside the rectangle', default=random.randint(5, 10))
 
     return parser
