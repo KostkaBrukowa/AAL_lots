@@ -12,38 +12,21 @@ class Solution:
         self.points = points
         self.points_queue = PointsQueue(points, self.square)
 
-        print(f'initialized with {horizontal_side, vertical_side, points}')
-
-    def _is_square_lot_slow(self):
-        points_inside = 0
-
-        for point in self.points:
-            if self.square.is_point_inside(point):
-                points_inside += 1
-
-            if points_inside > 1:
-                return False
-
-        return points_inside != 0
+    def _points_left_inside(self):
+        return len(self.points) - len(self.points_queue.removed_points)
 
     def _is_square_lot(self):
-        lot = len(self.points) == 1
-
-        # if self._debug:
-        #     lot_debug = self._is_square_lot_slow()
-        #     if lot != lot_debug:
-        #         raise Exception(f'there was a mistake in lot definition {self.square}')
-
-        return lot
+        return self._points_left_inside() == 1
 
     def compute_solution(self):
         while self.points:
-            point, side = min([self.points_queue.get_edge_point(side) for side in Side],
-                              key=lambda edge_point: self.square.lost_area(edge_point[1], edge_point[0]))
+            edge_points = [self.points_queue.get_edge_point(side) for side in Side]
 
-            # self.points_queue.clear_side(side)
-            self.square.move_side(side, point)
             if self._is_square_lot():
                 return self.square
+
+            point, side = min(edge_points, key=lambda edge_point: self.square.lost_area(edge_point[1], edge_point[0]))
+
+            self.square.move_side(side, point)
 
         return None

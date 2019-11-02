@@ -9,28 +9,9 @@ class Square:
         self.right_border = max(square_points, key=lambda p: p[0])[0]
         self.left_border = min(square_points, key=lambda p: p[0])[0]
 
-        self.config = {
-            Side.TOP: {
-                'border': self.top_border,
-                # depending on the side horizontal or vertical side
-                'dominant': lambda point: point[1]  # depending on the side X or Y value of point
-            },
-            Side.BOTTOM: {
-                'border': self.bottom_border,
-                'dominant': lambda point: point[1]
-            },
-            Side.RIGHT: {
-                'border': self.right_border,
-                'dominant': lambda point: point[0]
-            },
-            Side.LEFT: {
-                'border': self.left_border,
-                'dominant': lambda point: point[0]
-            }
-        }
-
     def is_point_inside(self, point):
         x, y = point
+
         return self.left_border < x < self.right_border and self.bottom_border < y < self.top_border
 
     def lost_area(self, side, point):
