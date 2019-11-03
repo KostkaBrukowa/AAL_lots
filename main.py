@@ -15,7 +15,7 @@ def draw_square(square: Square, color: str):
 
 
 def draw_points(points_set):
-    plt.xlim(-10, 10)
+    plt.xlim(-1, 10)
     plt.ylim(-1, 10)
 
     x = [point[0] for point in points_set]
@@ -34,14 +34,17 @@ if __name__ == '__main__':
 
         draw_points(points)
 
-        resolver = Solution(a, b, points)
+        square = Square((0, 0), (0, b), (a, 0), (a, b))
+        resolver = Solution(square, points=points)
+        # resolver = BruteForceSolution(a, b, points)
         draw_square(resolver.square, "teal")
 
-        solution = resolver.compute_solution()
-        if solution:
+        solutions = resolver.compute_solution()
+        for solution in solutions:
             print(f"Area of solution is {solution.area()}")
 
-        if solution:
-            draw_square(solution, "red")
+        # solution = resolver.compute_solution()
+        # if solution:
+        #     draw_square(solution, "red")
 
         plt.show()

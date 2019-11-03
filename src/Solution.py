@@ -5,28 +5,56 @@ from src.models.Side import Side
 from src.models.Square import Square
 
 
+def min_elements(iterable, key):
+    min_element = min(iterable, key=key)
+    min_value = key(min_element)
+
+    return [element for element in iterable if key(element) == min_value]
+
+
 class Solution:
-    def __init__(self, horizontal_side: int, vertical_side: int, points: Set[Tuple[int, int]], debug=True):
-        self._debug = debug
-        self.square = Square((0, 0), (0, vertical_side), (horizontal_side, 0), (horizontal_side, vertical_side))
+    def __init__(self, square: Square, *, points: Set[Tuple[int, int]] = None, points_queue=None, solutions=[],
+                 max_area=0):
         self.points = points
-        self.points_queue = PointsQueue(points, self.square)
+        self.square = square
+        self.solutions = solutions
+        self.max_area = max_area
+        self.points_queue = points_queue if points_queue is not None else PointsQueue(self.square, points=points)
 
-    def _points_left_inside(self):
-        return len(self.points) - len(self.points_queue.removed_points)
+    def copy(self, square: Square):
+        new_points_queue = self.points_queue.copy(square)
+        new_solution = Solution(square, points=self.points, points_queue=new_points_queue, solutions=self.solutions,
+                                max_area=self.max_area)
 
-    def _is_square_lot(self):
-        return self._points_left_inside() == 1
+        return new_solution
+
+    def _compute_solution(self):
+        edge_points = [self.points_queue.get_edge_point(side) for side in Side]
+
+        # if self.points_queue.empty() or self.square.area() < self.max_area:
+        if self.points_queue.empty():
+            return None
+
+        if self._is_square_lot():
+            # if self.square.area() > self.max_area:
+            #     self.max_area = self.square.area()
+            #     self.solutions = []
+
+            return self.square
+
+        lowest_area_loss_edge_points = min_elements(edge_points, key=lambda it: self.square.lost_area(*it))
+
+        for side, point in lowest_area_loss_edge_points:
+            resolver = self.copy(self.square.move_side(side, point))
+            solution = resolver._compute_solution()
+
+            if solution:
+                self.solutions.append(solution)
 
     def compute_solution(self):
-        while self.points:
-            edge_points = [self.points_queue.get_edge_point(side) for side in Side]
+        self._compute_solution()
 
-            if self._is_square_lot():
-                return self.square
+        return self.solutions
 
-            point, side = min(edge_points, key=lambda edge_point: self.square.lost_area(edge_point[1], edge_point[0]))
-
-            self.square.move_side(side, point)
-
-        return None
+    def _is_square_lot(self):
+        return len(self.points_queue.horizontal_queue) == 1
