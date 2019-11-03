@@ -8,4 +8,4 @@ class Side(Enum):
     BOTTOM = 4
 
     def is_vertical(self):
-        return self.value == Side.TOP or self.value == Side.BOTTOM
+        return self.value >= 3

@@ -42,6 +42,7 @@ if __name__ == '__main__':
         solutions = resolver.compute_solution()
         for solution in solutions:
             print(f"Area of solution is {solution.area()}")
+            draw_square(solution, "red")
 
         # solution = resolver.compute_solution()
         # if solution:

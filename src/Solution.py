@@ -12,49 +12,59 @@ def min_elements(iterable, key):
     return [element for element in iterable if key(element) == min_value]
 
 
+class BestSolution:
+    def __init__(self):
+        self.solutions = []
+        self.max_area = 0
+
+
 class Solution:
-    def __init__(self, square: Square, *, points: Set[Tuple[int, int]] = None, points_queue=None, solutions=[],
-                 max_area=0):
+    def __init__(self, square: Square, *, points: Set[Tuple[int, int]] = None, points_queue=None, best_solutions=None):
         self.points = points
         self.square = square
-        self.solutions = solutions
-        self.max_area = max_area
+        self.best_solutions = best_solutions if best_solutions is not None else BestSolution()
         self.points_queue = points_queue if points_queue is not None else PointsQueue(self.square, points=points)
 
     def copy(self, square: Square):
         new_points_queue = self.points_queue.copy(square)
-        new_solution = Solution(square, points=self.points, points_queue=new_points_queue, solutions=self.solutions,
-                                max_area=self.max_area)
+        new_solution = Solution(square, points=self.points, points_queue=new_points_queue,
+                                best_solutions=self.best_solutions)
 
         return new_solution
 
     def _compute_solution(self):
         edge_points = [self.points_queue.get_edge_point(side) for side in Side]
+        square_area = self.square.area()
 
-        # if self.points_queue.empty() or self.square.area() < self.max_area:
-        if self.points_queue.empty():
+        if self.points_queue.empty() or square_area < self.best_solutions.max_area:
             return None
 
-        if self._is_square_lot():
-            # if self.square.area() > self.max_area:
-            #     self.max_area = self.square.area()
-            #     self.solutions = []
+        if self._is_square_lot() and square_area >= self.best_solutions.max_area:
+            if square_area > self.best_solutions.max_area:
+                self.best_solutions.max_area = square_area
+                self.best_solutions.solutions = []
 
             return self.square
 
-        lowest_area_loss_edge_points = min_elements(edge_points, key=lambda it: self.square.lost_area(*it))
+        # lowest_area_loss_edge_points = min_elements(edge_points, key=lambda it: self.square.lost_area(*it))
 
-        for side, point in lowest_area_loss_edge_points:
-            resolver = self.copy(self.square.move_side(side, point))
+        for point, side in edge_points:
+            resolver = self.copy(self.square.move_side(point, side))
             solution = resolver._compute_solution()
 
             if solution:
-                self.solutions.append(solution)
+                self.best_solutions.solutions.append(solution)
 
     def compute_solution(self):
         self._compute_solution()
 
-        return self.solutions
+        return self.best_solutions.solutions
 
     def _is_square_lot(self):
-        return len(self.points_queue.horizontal_queue) == 1
+        # return len(self.points_queue.horizontal_queue) == 1
+        count = 0
+        for point in self.points:
+            if self.square.is_point_at(point):
+                count += 1
+
+        return count == 1

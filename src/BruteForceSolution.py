@@ -23,7 +23,7 @@ class BruteForceSolution:
         points_inside = 0
 
         for point in self.points:
-            if square.is_point_inside(point):
+            if square.is_point_at(point):
                 points_inside += 1
 
             if points_inside > 1:

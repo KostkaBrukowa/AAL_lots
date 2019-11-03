@@ -17,7 +17,15 @@ class Square:
         self.right_border = max(square_points, key=lambda p: p[0])[0]
         self.left_border = min(square_points, key=lambda p: p[0])[0]
 
-    def is_point_inside(self, point):
+    def is_point_inside(self, point, side: Side):
+        x, y = point
+
+        if side.is_vertical():
+            return self.bottom_border < y < self.top_border and self.left_border <= x <= self.right_border
+
+        return self.left_border < x < self.right_border and self.bottom_border <= y <= self.top_border
+
+    def is_point_at(self, point):
         x, y = point
 
         return self.left_border < x < self.right_border and self.bottom_border < y < self.top_border

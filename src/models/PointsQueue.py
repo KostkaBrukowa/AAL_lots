@@ -31,7 +31,7 @@ class PointsQueue:
         while self.horizontal_queue and self.vertical_queue:
             point = self._get_element(side)
 
-            if self.square.is_point_inside(point):
+            if self.square.is_point_inside(point, side):
                 return point, side
 
             self._pop(side)
