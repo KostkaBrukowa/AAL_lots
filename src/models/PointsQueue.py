@@ -7,6 +7,13 @@ from src.models.Square import Square
 
 Point = Tuple[int, int]
 
+# config = {
+#     Side.LEFT: {
+#         'getter': lambda: self.vertical_queue
+#         'remover': lambda: self._pop(Side.LEFT),
+#     }
+# }
+
 
 class PointsQueue:
     def __init__(self, square: Square,

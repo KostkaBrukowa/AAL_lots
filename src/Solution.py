@@ -16,6 +16,7 @@ class BestSolution:
     def __init__(self):
         self.solutions = []
         self.max_area = 0
+        self.visited_squares = set()
 
 
 class Solution:
@@ -36,8 +37,10 @@ class Solution:
         edge_points = [self.points_queue.get_edge_point(side) for side in Side]
         square_area = self.square.area()
 
-        if self.points_queue.empty() or square_area < self.best_solutions.max_area:
+        if self.points_queue.empty() or square_area < self.best_solutions.max_area or self.square in self.best_solutions.visited_squares:
             return None
+
+        self.best_solutions.visited_squares.add(self.square)
 
         if self._is_square_lot() and square_area >= self.best_solutions.max_area:
             if square_area > self.best_solutions.max_area:
@@ -45,8 +48,6 @@ class Solution:
                 self.best_solutions.solutions = []
 
             return self.square
-
-        # lowest_area_loss_edge_points = min_elements(edge_points, key=lambda it: self.square.lost_area(*it))
 
         for point, side in edge_points:
             resolver = self.copy(self.square.move_side(point, side))
@@ -61,7 +62,6 @@ class Solution:
         return self.best_solutions.solutions
 
     def _is_square_lot(self):
-        # return len(self.points_queue.horizontal_queue) == 1
         count = 0
         for point in self.points:
             if self.square.is_point_at(point):

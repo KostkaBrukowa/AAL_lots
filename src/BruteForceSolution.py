@@ -16,7 +16,7 @@ def generate_points_on_border(horizontal_side, vertical_side):
 
 class BruteForceSolution:
     def __init__(self, horizontal_side, vertical_side, points):
-        self.square = Square((0, 0), (0, vertical_side), (horizontal_side, 0), (horizontal_side, vertical_side))
+        self.square = Square.out_of_points((0, 0), (0, vertical_side), (horizontal_side, 0), (horizontal_side, vertical_side))
         self.points = points | generate_points_on_border(horizontal_side, vertical_side)
 
     def _is_square_lot(self, square):
@@ -32,7 +32,7 @@ class BruteForceSolution:
         return points_inside != 0
 
     def compute_solution(self):
-        all_squares = (Square(*sides) for sides in permutations(self.points, 4))
+        all_squares = (Square.out_of_points(*sides) for sides in permutations(self.points, 4))
 
         lot_squares = filter(lambda square: self._is_square_lot(square), all_squares)
 

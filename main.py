@@ -1,5 +1,6 @@
 from command_line_config import create_parser
 from src.BruteForceSolution import BruteForceSolution
+from src.PointsSolution import PointsSolution
 from src.Solution import Solution
 from src.models.Square import Square
 from src.random_generator.random_problem import generate_problem
@@ -15,8 +16,8 @@ def draw_square(square: Square, color: str):
 
 
 def draw_points(points_set):
-    plt.xlim(-1, 10)
-    plt.ylim(-1, 10)
+    # plt.xlim(-1, 10)
+    # plt.ylim(-1, 10)
 
     x = [point[0] for point in points_set]
     y = [point[1] for point in points_set]
@@ -25,7 +26,7 @@ def draw_points(points_set):
 
 
 if __name__ == '__main__':
-    random.seed(50)
+    random.seed(51)
     args = vars(create_parser().parse_args())
     if args['m2']:
         a, b, p = args['a'], args['b'], args['p']
@@ -34,18 +35,20 @@ if __name__ == '__main__':
 
         draw_points(points)
 
-        square = Square((0, 0), (0, b), (a, 0), (a, b))
-        resolver = Solution(square, points=points)
-        # resolver = BruteForceSolution(a, b, points)
-        draw_square(resolver.square, "teal")
+        square = Square(0, a, 0, b)
+        draw_square(square, "teal")
 
+        resolver = Solution(square, points=points)
         solutions = resolver.compute_solution()
         for solution in solutions:
             print(f"Area of solution is {solution.area()}")
-            draw_square(solution, "red")
+            draw_square(solution, "green")
 
-        # solution = resolver.compute_solution()
-        # if solution:
-        #     draw_square(solution, "red")
+        # resolver = BruteForceSolution(a, b, points)
+        resolver = PointsSolution(square, points)
+        solution = resolver.compute_solution()
+        if solution:
+            print(f"Area of solution is {solution.area()}")
+            draw_square(solution, "red")
 
         plt.show()
