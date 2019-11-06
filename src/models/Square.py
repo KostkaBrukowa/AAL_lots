@@ -37,13 +37,23 @@ class Square:
         x, y = point
 
         if side == Side.LEFT:
-            return point[0] == self.left_border and self.bottom_border <= y <= self.top_border
+            return point[0] == self.left_border and self.bottom_border < y < self.top_border
         if side == Side.RIGHT:
-            return point[0] == self.right_border and self.bottom_border <= y <= self.top_border
+            return point[0] == self.right_border and self.bottom_border < y < self.top_border
         if side == Side.BOTTOM:
-            return point[1] == self.bottom_border and self.left_border <= x <= self.right_border
+            return point[1] == self.bottom_border and self.left_border < x < self.right_border
         if side == Side.TOP:
-            return point[1] == self.top_border and self.left_border <= x <= self.right_border
+            return point[1] == self.top_border and self.left_border < x < self.right_border
+
+    def get_border_value(self, side: Side):
+        if side == Side.LEFT:
+            return self.left_border
+        if side == Side.RIGHT:
+            return self.right_border
+        if side == Side.BOTTOM:
+            return self.bottom_border
+        if side == Side.TOP:
+            return self.top_border
 
     def area(self):
         return (self.right_border - self.left_border) * (self.top_border - self.bottom_border)

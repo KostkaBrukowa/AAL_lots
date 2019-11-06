@@ -47,8 +47,8 @@ if __name__ == '__main__':
         # resolver = BruteForceSolution(a, b, points)
         resolver = PointsSolution(square, points)
         solution = resolver.compute_solution()
-        if solution:
-            print(f"Area of solution is {solution.area()}")
-            draw_square(solution, "red")
+        # if solution:
+        #     print(f"Area of solution is {solution.area()}")
+        #     draw_square(solution, "red")
 
         plt.show()
