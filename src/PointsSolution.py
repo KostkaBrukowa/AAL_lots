@@ -6,11 +6,10 @@ from src.models.Side import Side
 from src.models.Square import Square
 
 
-def _get_sides_with_points_on_both_corners(corners_with_points: List[Tuple[Side, Side]]) -> [Side]:
-    sides_count = Counter(list(sum(corners_with_points, ()))).most_common(
-        4)  # flat array of corners, each side being counted
-
-    return [side for side, count in sides_count if count >= 2]
+# def _get_sides_with_points_on_both_corners(corners_with_points: List[Tuple[Side, Side]]) -> [Side]:
+#     sides_count = Counter(list(sum(corners_with_points, ()))).most_common(4)  # flat array of corners, each side being counted
+#
+# return [side for side, count in sides_count if count >= 2]
 
 
 class PointsSolution:
@@ -19,17 +18,17 @@ class PointsSolution:
         self.square = square
 
         points_to_sort = frozenset(points).union([(0, 0), (square.right_border, square.top_border)])
-        self.x_sorted_arr = list(set(point[0] for point in sorted(points_to_sort, key=lambda point: point[0])))
-        self.y_sorted_arr = list(set(point[1] for point in sorted(points_to_sort, key=lambda point: point[1])))
+        self.x_sorted_arr = sorted(list(set(point[0] for point in sorted(points_to_sort, key=lambda point: point[0]))))
+        self.y_sorted_arr = sorted(list(set(point[1] for point in sorted(points_to_sort, key=lambda point: point[1]))))
 
         self.x_cord_map = {point: index for index, point in enumerate(self.x_sorted_arr)}
         self.y_cord_map = {point: index for index, point in enumerate(self.y_sorted_arr)}
 
-        self.x_to_point_map = defaultdict(set)
-        self.y_to_point_map = defaultdict(set)
-        for point in points_to_sort:
-            self.x_to_point_map[point[0]].add(point)
-            self.y_to_point_map[point[1]].add(point)
+        # self.x_to_point_map = defaultdict(set)
+        # self.y_to_point_map = defaultdict(set)
+        # for point in points_to_sort:
+        #     self.x_to_point_map[point[0]].add(point)
+        #     self.y_to_point_map[point[1]].add(point)
 
     def compute_solution(self):
         return max((self.biggest_lot(point) for point in self.points), key=lambda square: square.area())
@@ -43,27 +42,23 @@ class PointsSolution:
 
         unmovable_sides = [side for side in Side if self._is_unmovable_side(side, smallest_lot)]
 
-        corners_with_points = self._get_corners_with_points(smallest_lot)
+        # corners_with_points = self._get_corners_with_points(smallest_lot)
 
-        self._extend_corners(corners_with_points, unmovable_sides, smallest_lot)
+        # unmovable_sides.extend(_get_sides_with_points_on_both_corners(corners_with_points))
 
-        unmovable_sides.extend(_get_sides_with_points_on_both_corners(corners_with_points))
+        return self._extend_corners(unmovable_sides, smallest_lot)
 
-        return smallest_lot
-
-    def _extend_corners(self, corners_with_points: List[Tuple[Side, Side]], unmovable_sides: List[Side],
-                        square) -> Square:
+    def _extend_corners(self, unmovable_sides: List[Side], square: Square) -> Square:
         max_lot = square
-        for corner_sides in self._get_corners_with_points(square):
-            for side in corner_sides:
-                if side in unmovable_sides:
-                    continue
 
-                extended_lot = self._extend_side(side, square)
-                lot = self._extend_corners(corners_with_points, [*unmovable_sides, side], extended_lot)
+        for side in Side:
+            if side in unmovable_sides:
+                continue
 
-                if extended_lot.area() > max_lot.area():
-                    max_lot = lot
+            lot = self._extend_corners([*unmovable_sides, side], self._extend_side(side, square))
+
+            if lot.area() > max_lot.area():
+                max_lot = lot
 
         return max_lot
 
@@ -87,9 +82,6 @@ class PointsSolution:
 
     def _is_unmovable_side(self, side: Side, square: Square):
         return self._square_contains_edge(side, square) or self._is_point_on_side(side, square)
-
-    # def _get_unmovable_sides(self, square: Square):
-    #     return
 
     def _get_corners_with_points(self, square: Square):
         corners = []

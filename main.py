@@ -38,17 +38,17 @@ if __name__ == '__main__':
         square = Square(0, a, 0, b)
         draw_square(square, "teal")
 
-        resolver = Solution(square, points=points)
-        solutions = resolver.compute_solution()
-        for solution in solutions:
-            print(f"Area of solution is {solution.area()}")
-            draw_square(solution, "green")
+        # resolver = Solution(square, points=points)
+        # solutions = resolver.compute_solution()
+        # for solution in solutions:
+        #     print(f"Area of solution is {solution.area()}")
+        #     draw_square(solution, "green")
 
         # resolver = BruteForceSolution(a, b, points)
         resolver = PointsSolution(square, points)
         solution = resolver.compute_solution()
-        # if solution:
-        #     print(f"Area of solution is {solution.area()}")
-        #     draw_square(solution, "red")
+        if solution:
+            print(f"Area of solution is {solution.area()}")
+            draw_square(solution, "red")
 
         plt.show()
