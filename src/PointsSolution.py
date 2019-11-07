@@ -42,20 +42,16 @@ class PointsSolution:
 
         unmovable_sides = [side for side in Side if self._is_unmovable_side(side, smallest_lot)]
 
-        # corners_with_points = self._get_corners_with_points(smallest_lot)
+        return self._extend_all_sides(unmovable_sides, smallest_lot)
 
-        # unmovable_sides.extend(_get_sides_with_points_on_both_corners(corners_with_points))
-
-        return self._extend_corners(unmovable_sides, smallest_lot)
-
-    def _extend_corners(self, unmovable_sides: List[Side], square: Square) -> Square:
+    def _extend_all_sides(self, unmovable_sides: List[Side], square: Square) -> Square:
         max_lot = square
 
         for side in Side:
             if side in unmovable_sides:
                 continue
 
-            lot = self._extend_corners([*unmovable_sides, side], self._extend_side(side, square))
+            lot = self._extend_all_sides([*unmovable_sides, side], self._extend_side(side, square))
 
             if lot.area() > max_lot.area():
                 max_lot = lot
@@ -82,20 +78,6 @@ class PointsSolution:
 
     def _is_unmovable_side(self, side: Side, square: Square):
         return self._square_contains_edge(side, square) or self._is_point_on_side(side, square)
-
-    def _get_corners_with_points(self, square: Square):
-        corners = []
-
-        if (square.left_border, square.bottom_border) in self.points:
-            corners.append((Side.LEFT, Side.BOTTOM))
-        if (square.left_border, square.top_border) in self.points:
-            corners.append((Side.LEFT, Side.TOP))
-        if (square.right_border, square.bottom_border) in self.points:
-            corners.append((Side.RIGHT, Side.BOTTOM))
-        if (square.right_border, square.top_border) in self.points:
-            corners.append((Side.RIGHT, Side.TOP))
-
-        return corners
 
     def _get_nearest_point(self, side: Side, edge_value: int) -> Point:
         current_cord_map = self.y_cord_map if side.is_vertical() else self.x_cord_map

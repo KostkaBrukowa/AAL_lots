@@ -20,19 +20,12 @@ class Square:
 
         return Square(left_border, right_border, bottom_border, top_border)
 
-    def is_point_inside(self, point, side: Side):
-        x, y = point
-
-        if side.is_vertical():
-            return self.bottom_border < y < self.top_border and self.left_border <= x <= self.right_border
-
-        return self.left_border < x < self.right_border and self.bottom_border <= y <= self.top_border
-
-    def is_point_at(self, point):
+    def is_point_inside(self, point):
         x, y = point
 
         return self.left_border < x < self.right_border and self.bottom_border < y < self.top_border
 
+    # TODO delete
     def is_point_on_border(self, point, side):
         x, y = point
 
@@ -59,6 +52,7 @@ class Square:
         return (self.right_border - self.left_border) * (self.top_border - self.bottom_border)
 
     def move_side(self, point: Tuple[int, int], side: Side):
+        """Returns new square with side moved"""
         new_square = Square(self.left_border, self.right_border, self.bottom_border, self.top_border)
         new_square._move_side(side, point)
 

@@ -64,7 +64,7 @@ class Solution:
     def _is_square_lot(self):
         count = 0
         for point in self.points:
-            if self.square.is_point_at(point):
+            if self.square.is_point_inside(point):
                 count += 1
 
         return count == 1

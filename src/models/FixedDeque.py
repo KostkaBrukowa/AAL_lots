@@ -20,9 +20,6 @@ class FixedDeque:
         return FixedDeque(self.iterable, left=self.left, right=self.right)
 
     def __len__(self):
-        # len = self.front - self.end + 1
-        # if len < 0:
-        #     print(len)
         return self.right - self.left + 1
 
     def __bool__(self):

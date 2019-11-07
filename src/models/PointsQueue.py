@@ -1,4 +1,3 @@
-from collections import deque
 from typing import Tuple, Set, List
 
 from src.models.FixedDeque import FixedDeque
@@ -7,19 +6,10 @@ from src.models.Square import Square
 
 Point = Tuple[int, int]
 
-# config = {
-#     Side.LEFT: {
-#         'getter': lambda: self.vertical_queue
-#         'remover': lambda: self._pop(Side.LEFT),
-#     }
-# }
-
 
 class PointsQueue:
-    def __init__(self, square: Square,
-                 *,
-                 horizontal_queue: FixedDeque = None, vertical_queue: FixedDeque = None, points: Set[Point] = None,
-                 ):
+    def __init__(self, square: Square, *, horizontal_queue: FixedDeque = None, vertical_queue: FixedDeque = None,
+                 points: Set[Point] = None):
         self.square = square
 
         if horizontal_queue is not None and vertical_queue is not None:
@@ -38,7 +28,7 @@ class PointsQueue:
         while self.horizontal_queue and self.vertical_queue:
             point = self._get_element(side)
 
-            if self.square.is_point_inside(point, side):
+            if self._is_point_inside_square(point, side):
                 return point, side
 
             self._pop(side)
@@ -73,3 +63,11 @@ class PointsQueue:
             return self.vertical_queue.front()
         if side == Side.LEFT:
             return self.horizontal_queue.front()
+
+    def _is_point_inside_square(self, point, side: Side):
+        x, y = point
+
+        if side.is_vertical():
+            return self.square.bottom_border < y < self.square.top_border and self.square.left_border <= x <= self.square.right_border
+
+        return self.square.left_border < x < self.square.right_border and self.square.bottom_border <= y <= self.square.top_border
