@@ -20,6 +20,9 @@ class Square:
 
         return Square(left_border, right_border, bottom_border, top_border)
 
+    def copy(self):
+        return Square(self.left_border, self.right_border, self.bottom_border, self.top_border)
+
     def is_point_inside(self, point):
         x, y = point
 
@@ -69,7 +72,10 @@ class Square:
             self.bottom_border = point[1]
 
     def __str__(self):
-        return f"left {self.left_border} top {self.top_border} right {self.right_border} bottom {self.bottom_border}"
+        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border}"
+
+    def __repr__(self):
+        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border}"
 
     def __hash__(self):
         return hash(f"{self.left_border}-{self.top_border}-{self.right_border}-{self.bottom_border}")
