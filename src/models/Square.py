@@ -72,10 +72,10 @@ class Square:
             self.bottom_border = point[1]
 
     def __str__(self):
-        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border}"
+        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border} area {self.area()}"
 
     def __repr__(self):
-        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border}"
+        return f"left {self.left_border} right {self.right_border} bottom {self.bottom_border} top {self.top_border} area {self.area()}"
 
     def __hash__(self):
         return hash(f"{self.left_border}-{self.top_border}-{self.right_border}-{self.bottom_border}")

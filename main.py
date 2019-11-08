@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import random
 
 
-def draw_square(square: Square, *, index: float = 0, color: str = None):
+def draw_square(square: Square, *, index: float = 0, color: str = "red"):
     plt.plot((square.left_border, square.left_border), (square.bottom_border, square.top_border), color=color)
     plt.plot((square.left_border, square.right_border), (square.top_border, square.top_border), color=color)
     plt.plot((square.right_border, square.right_border), (square.top_border, square.bottom_border), color=color)
@@ -35,12 +35,17 @@ if __name__ == '__main__':
         square = Square(0, a, 0, b)
         draw_points(points)
         draw_square(square, color="teal")
+        # plt.show()
 
-        # test = [{(1, 1), (3, 3)}, Square(0, 4, 0, 4), [Square(0, 4, 0, 3)]]
+        # test = [
+        #     {(1, 2), (3, 2)},
+        #     Square(0, 4, 0, 4),
+        # ]
         # points = test[0]
         # square = test[1]
         # draw_square(square, color="teal")
         # draw_points(points)
+        # plt.show()
 
         # resolver = Solution(square, points)
         # resolver = BruteForceSolution(square, points)

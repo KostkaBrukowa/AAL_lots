@@ -1,5 +1,6 @@
 from collections import Counter, defaultdict
 from typing import Set, Tuple, List, Iterable, Callable
+from bisect import bisect, insort
 
 from src.models.PointsQueue import Point
 from src.models.Side import Side
@@ -48,11 +49,11 @@ class PointsSolution:
         self.x_cord_to_index_map = {x_coord: index for index, x_coord in enumerate(self.sorted_x_cords)}
         self.y_cord_to_index_map = {y_coord: index for index, y_coord in enumerate(self.sorted_y_cords)}
 
-        # self.x_to_point_map = defaultdict(set)
-        # self.y_to_point_map = defaultdict(set)
-        # for point in points_to_sort:
-        #     self.x_to_point_map[point[0]].add(point)
-        #     self.y_to_point_map[point[1]].add(point)
+        self.x_to_point_map = defaultdict(lambda: [0, square.right_border])
+        self.y_to_point_map = defaultdict(lambda: [0, square.top_border])
+        for point in points_to_sort:
+            insort(self.x_to_point_map[point[0]], point[1])
+            insort(self.y_to_point_map[point[1]], point[0])
 
     def compute_solution(self):
         return flatten(max_elements((self.biggest_lot(point) for point in self.points), key=_square_area))
@@ -64,18 +65,17 @@ class PointsSolution:
         smallest_lot = Square(self.sorted_x_cords[x_cord_index - 1], self.sorted_x_cords[x_cord_index + 1],
                               self.sorted_y_cords[y_cord_index - 1], self.sorted_y_cords[y_cord_index + 1])
 
-        unmovable_sides = [side for side in Side if self._is_unmovable_side(side, smallest_lot)]
+        return max_elements(self._extend_all_sides(smallest_lot), key=lambda item: item.area())
 
-        return max_elements(self._extend_all_sides(unmovable_sides, smallest_lot), key=lambda item: item.area())
-
-    def _extend_all_sides(self, unmovable_sides: List[Side], square: Square) -> Set[Square]:
+    def _extend_all_sides(self, square: Square) -> Set[Square]:
         lots = {square}
+        unmovable_sides = [side for side in Side if self._is_unmovable_side(side, square)]
 
         for side in Side:
             if side in unmovable_sides:
                 continue
 
-            extended_lots = self._extend_all_sides([*unmovable_sides, side], self._extend_side(side, square))
+            extended_lots = self._extend_all_sides(self._extend_side(side, square))
 
             lots |= extended_lots
 
@@ -94,13 +94,17 @@ class PointsSolution:
         if side == Side.TOP:
             return square.top_border == self.square.top_border
 
-    def _is_point_on_side(self, side: Side, square: Square):
-        # TODO make this faster
-        for point in self.points:
-            if square.is_point_on_border(point, side):
-                return True
+    def _is_point_on_side(self, side: Side, square: Square) -> bool:
+        if side.is_vertical():
+            points_with_same_cord_as_side = self.y_to_point_map[square.get_border_value(side)]
+            next_larger_point_index = bisect(points_with_same_cord_as_side, square.left_border)
 
-        return False
+            return points_with_same_cord_as_side[next_larger_point_index] < square.right_border
+
+        points_with_same_cord_as_side = self.x_to_point_map[square.get_border_value(side)]
+        next_larger_point_index = bisect(points_with_same_cord_as_side, square.bottom_border)
+
+        return points_with_same_cord_as_side[next_larger_point_index] < square.top_border
 
     def _extend_side(self, side: Side, square: Square) -> Square:
         current_square = square
