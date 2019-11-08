@@ -39,14 +39,11 @@ class Solution:
                 self.best_solutions.max_area = square_area
                 self.best_solutions.solutions = []
 
-            return self.square
+            return self.best_solutions.solutions.append(self.square)
 
         for point, side in edge_points:
             resolver = self._copy(self.square.move_side(point, side))
-            solution = resolver._compute_solution()
-
-            if solution:
-                self.best_solutions.solutions.append(solution)
+            resolver._compute_solution()
 
     def _copy(self, square: Square):
         new_points_queue = self.points_queue.copy(square)

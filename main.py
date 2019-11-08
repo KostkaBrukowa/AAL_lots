@@ -31,22 +31,20 @@ if __name__ == '__main__':
     if args['m2']:
         a, b, p = args['a'], args['b'], args['p']
 
-        # points = generate_problem(a, b, p)
-        #
-        # draw_points(points)
-        #
-        # square = Square(0, a, 0, b)
-        # draw_square(square, color="teal")
-
-        test = [{(1, 1), (3, 3)}, Square(0, 4, 0, 4), [Square(0, 4, 0, 3)]]
-        points = test[0]
-        square = test[1]
-        draw_square(square, color="teal")
+        points = generate_problem(a, b, p)
+        square = Square(0, a, 0, b)
         draw_points(points)
+        draw_square(square, color="teal")
+
+        # test = [{(1, 1), (3, 3)}, Square(0, 4, 0, 4), [Square(0, 4, 0, 3)]]
+        # points = test[0]
+        # square = test[1]
+        # draw_square(square, color="teal")
+        # draw_points(points)
 
         # resolver = Solution(square, points)
-        resolver = BruteForceSolution(square, points)
-        # resolver = PointsSolution(square, points)
+        # resolver = BruteForceSolution(square, points)
+        resolver = PointsSolution(square, points)
         solutions = resolver.compute_solution()
         print(solutions)
         for index, solution in enumerate(solutions):

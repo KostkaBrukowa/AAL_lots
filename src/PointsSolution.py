@@ -26,6 +26,14 @@ def max_elements(iterable: Iterable[any], key: Callable[[any], any]):
     return max_elems
 
 
+def flatten(iterable: Iterable[any]):
+    return [item for sublist in iterable for item in sublist]
+
+
+def _square_area(square_list: [Square]) -> int:
+    return square_list[0].area() if square_list else 0
+
+
 class PointsSolution:
     def __init__(self, square: Square, points: Set[Tuple[int, int]]):
         self.points = points
@@ -47,7 +55,7 @@ class PointsSolution:
         #     self.y_to_point_map[point[1]].add(point)
 
     def compute_solution(self):
-        return max((self.biggest_lot(point) for point in self.points), key=lambda square: square.area())
+        return flatten(max_elements((self.biggest_lot(point) for point in self.points), key=_square_area))
 
     def biggest_lot(self, point: Point):
         x_cord_index = self.x_cord_to_index_map[point[0]]
@@ -58,21 +66,20 @@ class PointsSolution:
 
         unmovable_sides = [side for side in Side if self._is_unmovable_side(side, smallest_lot)]
 
-        return self._extend_all_sides(unmovable_sides, smallest_lot)
+        return max_elements(self._extend_all_sides(unmovable_sides, smallest_lot), key=lambda item: item.area())
 
-    def _extend_all_sides(self, unmovable_sides: List[Side], square: Square) -> Square:
-        max_lot = square
+    def _extend_all_sides(self, unmovable_sides: List[Side], square: Square) -> Set[Square]:
+        lots = {square}
 
         for side in Side:
             if side in unmovable_sides:
                 continue
 
-            lot = self._extend_all_sides([*unmovable_sides, side], self._extend_side(side, square))
+            extended_lots = self._extend_all_sides([*unmovable_sides, side], self._extend_side(side, square))
 
-            if lot.area() > max_lot.area():
-                max_lot = lot
+            lots |= extended_lots
 
-        return max_lot
+        return lots
 
     def _is_unmovable_side(self, side: Side, square: Square):
         return self._is_square_on_edge(side, square) or self._is_point_on_side(side, square)
