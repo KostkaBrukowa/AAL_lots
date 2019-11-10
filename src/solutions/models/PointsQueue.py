@@ -1,8 +1,8 @@
 from typing import Tuple, Set, List
 
-from src.models.FixedDeque import FixedDeque
-from src.models.Side import Side
-from src.models.Square import Square
+from src.solutions.models.FixedDeque import FixedDeque
+from src.solutions.models.Side import Side
+from src.solutions.models.Square import Square
 
 Point = Tuple[int, int]
 

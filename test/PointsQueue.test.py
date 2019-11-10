@@ -1,7 +1,7 @@
 import unittest
 
-from src.models.PointsQueue import PointsQueue
-from src.models.Side import Side
+from src.solutions.models.PointsQueue import PointsQueue
+from src.solutions.models.Side import Side
 
 
 class MyTestCase(unittest.TestCase):

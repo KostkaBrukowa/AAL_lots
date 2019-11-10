@@ -1,59 +1,51 @@
-from command_line_config import create_parser
-from src.BruteForceSolution import BruteForceSolution
-from src.PointsSolution import PointsSolution
-from src.Solution import Solution
-from src.models.Square import Square
-from src.random_generator.random_problem import generate_problem
-import matplotlib.pyplot as plt
-import random
+from typing import Set
+
+from src.data.plots.DrawSolution import show_result
+from src.data.random_generator.random_problem import generate_problem
+from src.modes.command_line_config import create_parser
+from src.modes.filemode.FileReader import read_file, save_result_to_file
+from src.modes.tablemode.Analizer import analyze
+from src.solutions.BruteForceSolution import BruteForceSolution
+from src.solutions.PointsSolution import PointsSolution
+from src.solutions.Solution import Solution
+from src.solutions.models.PointsQueue import Point
+from src.solutions.models.Square import Square
 
 
-def draw_square(square: Square, *, index: float = 0, color: str = "red"):
-    plt.plot((square.left_border, square.left_border), (square.bottom_border, square.top_border), color=color)
-    plt.plot((square.left_border, square.right_border), (square.top_border, square.top_border), color=color)
-    plt.plot((square.right_border, square.right_border), (square.top_border, square.bottom_border), color=color)
-    plt.plot((square.right_border, square.left_border), (square.bottom_border, square.bottom_border), color=color)
+def compute_solution(args, square: Square, points: Set[Point]) -> [Square]:
+    if args['bt']:
+        return BruteForceSolution(square, points).compute_solution()
+    if args['oi']:
+        return Solution(square, points).compute_solution()
+    if args['io']:
+        return PointsSolution(square, points).compute_solution()
+
+    raise Exception('No -bt -oi -io flag was passed')
 
 
-def draw_points(points_set):
-    # plt.xlim(-1, 10)
-    # plt.ylim(-1, 10)
-
-    x = [point[0] for point in points_set]
-    y = [point[1] for point in points_set]
-
-    plt.scatter(x, y)
+def read_int_args(args, *flags):
+    return [int(args[arg]) for arg in flags]
 
 
 if __name__ == '__main__':
-    random.seed(51)
     args = vars(create_parser().parse_args())
+    print(args)
+
+    if args['m1']:
+        filename = args['f']
+        square, points = read_file(filename)
+        print(square, points)
+        result_squares = compute_solution(args, square, points)
+        save_result_to_file(result_squares)
+        show_result(square, result_squares, points)
+
     if args['m2']:
-        a, b, p = args['a'], args['b'], args['p']
+        points_count, width, height = read_int_args(args, 'n', 'w', 'ht')
+        square, points = generate_problem(width, height, points_count)
+        show_result(square, [], points)
+        result_squares = compute_solution(args, square, points)
+        show_result(square, result_squares, points)
+        save_result_to_file(result_squares)
 
-        points = generate_problem(a, b, p)
-        square = Square(0, a, 0, b)
-        draw_points(points)
-        draw_square(square, color="teal")
-        # plt.show()
-
-        # test = [
-        #     {(1, 2), (3, 2)},
-        #     Square(0, 4, 0, 4),
-        # ]
-        # points = test[0]
-        # square = test[1]
-        # draw_square(square, color="teal")
-        # draw_points(points)
-        # plt.show()
-
-        # resolver = Solution(square, points)
-        # resolver = BruteForceSolution(square, points)
-        resolver = PointsSolution(square, points)
-        solutions = resolver.compute_solution()
-        print(solutions)
-        for index, solution in enumerate(solutions):
-            print(f"Area of solution is {solution.area()}")
-            draw_square(solution, index=index)
-
-        plt.show()
+    if args['m3']:
+        analyze(args, *read_int_args(args, 'p', 'w', 'ht', 'pstep', 'wstep', 'hstep', 'k', 'r'))

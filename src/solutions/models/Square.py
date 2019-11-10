@@ -1,5 +1,5 @@
 from typing import Tuple
-from src.models.Side import Side
+from src.solutions.models.Side import Side
 
 
 class Square:

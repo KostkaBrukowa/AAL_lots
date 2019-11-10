@@ -1,16 +1,11 @@
-from collections import Counter, defaultdict
-from typing import Set, Tuple, List, Iterable, Callable
+from collections import defaultdict
+from typing import Set, Tuple, Iterable, Callable
 from bisect import bisect, insort
 
-from src.models.PointsQueue import Point
-from src.models.Side import Side
-from src.models.Square import Square
+from src.solutions.models.PointsQueue import Point
+from src.solutions.models.Side import Side
+from src.solutions.models.Square import Square
 
-
-# def _get_sides_with_points_on_both_corners(corners_with_points: List[Tuple[Side, Side]]) -> [Side]:
-#     sides_count = Counter(list(sum(corners_with_points, ()))).most_common(4)  # flat array of corners, each side being counted
-#
-# return [side for side, count in sides_count if count >= 2]
 
 def max_elements(iterable: Iterable[any], key: Callable[[any], any]):
     max_value = None
@@ -27,7 +22,7 @@ def max_elements(iterable: Iterable[any], key: Callable[[any], any]):
     return max_elems
 
 
-def flatten(iterable: Iterable[any]):
+def flatten(iterable: Iterable[any]) -> Iterable[any]:
     return [item for sublist in iterable for item in sublist]
 
 
@@ -49,8 +44,8 @@ class PointsSolution:
         self.x_cord_to_index_map = {x_coord: index for index, x_coord in enumerate(self.sorted_x_cords)}
         self.y_cord_to_index_map = {y_coord: index for index, y_coord in enumerate(self.sorted_y_cords)}
 
-        self.x_to_point_map = defaultdict(lambda: [0, square.right_border])
-        self.y_to_point_map = defaultdict(lambda: [0, square.top_border])
+        self.x_to_point_map = defaultdict(lambda: [0, square.top_border])
+        self.y_to_point_map = defaultdict(lambda: [0, square.right_border])
         for point in points_to_sort:
             insort(self.x_to_point_map[point[0]], point[1])
             insort(self.y_to_point_map[point[1]], point[0])
@@ -103,6 +98,10 @@ class PointsSolution:
 
         points_with_same_cord_as_side = self.x_to_point_map[square.get_border_value(side)]
         next_larger_point_index = bisect(points_with_same_cord_as_side, square.bottom_border)
+        try:
+            points_with_same_cord_as_side[next_larger_point_index] < square.top_border
+        except:
+            print('here')
 
         return points_with_same_cord_as_side[next_larger_point_index] < square.top_border
 
