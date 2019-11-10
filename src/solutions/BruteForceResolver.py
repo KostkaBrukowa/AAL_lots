@@ -2,9 +2,10 @@ from typing import Set
 
 from itertools import permutations
 
-from src.solutions.PointsSolution import max_elements
 from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
+from src.solutions.utils.is_square_a_lot import is_square_lot
+from src.solutions.utils.max_elements import max_elements
 
 
 def generate_points_on_border(horizontal_side, vertical_side):
@@ -18,7 +19,7 @@ def generate_points_on_border(horizontal_side, vertical_side):
     return set(border_points)
 
 
-class BruteForceSolution:
+class BruteForceResolver:
     def __init__(self, square: Square, points: Set[Point]):
         self.square = square
         self.visited_squares = set()
@@ -26,24 +27,10 @@ class BruteForceSolution:
         points_on_border = generate_points_on_border(square.right_border, square.top_border)
         self.points = points.union(points_on_border)
 
-    @staticmethod
-    def is_square_lot(points: Set[Point], square: Square):
-        points_inside = 0
-
-        for point in points:
-            if square.is_point_inside(point):
-                points_inside += 1
-
-            if points_inside > 1:
-                return False
-
-        return points_inside != 0
-
     def compute_solution(self):
         all_squares = (Square.out_of_points(*points) for points in permutations(self.points, 4))
 
         return max_elements(self._find_square_lots(all_squares), key=lambda s: s.area())
-        # return max(lot_squares, key=lambda s: s.area())
 
     def _find_square_lots(self, all_squares):
         for square in all_squares:
@@ -51,5 +38,5 @@ class BruteForceSolution:
                 continue
 
             self.visited_squares.add(square)
-            if self.is_square_lot(self.points, square):
+            if is_square_lot(self.points, square):
                 yield square

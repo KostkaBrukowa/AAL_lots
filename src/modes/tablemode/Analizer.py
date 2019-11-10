@@ -1,24 +1,22 @@
 import time
-from math import sqrt
-import random
 from typing import Set, Callable
 
 from src.data.plots.DrawSolution import show_result
 from src.data.random_generator.random_problem import generate_problem
-from src.solutions.BruteForceSolution import BruteForceSolution
-from src.solutions.PointsSolution import PointsSolution
-from src.solutions.Solution import Solution
+from src.solutions.BruteForceResolver import BruteForceResolver
+from src.solutions.InsideOutResolver import InsideOutResolver
+from src.solutions.OutsideInResolver import OutsideInResolver
 from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
 
 
 def compute_solution(args, square: Square, points: Set[Point]) -> [Square]:
     if args['bt']:
-        return BruteForceSolution(square, points).compute_solution()
+        return BruteForceResolver(square, points).compute_solution()
     if args['oi']:
-        return Solution(square, points).compute_solution()
+        return OutsideInResolver(square, points).compute_solution()
     if args['io']:
-        return PointsSolution(square, points).compute_solution()
+        return InsideOutResolver(square, points).compute_solution()
 
 
 def solve_instance(args, points_count: int, width: int, height: int) -> Callable[[], any]:
@@ -44,6 +42,7 @@ def analyze(args, start_points_count: int, start_width: int, start_height: int, 
         points_count = start_points_count + i * points_step_size
         width = start_width + i * width_step_size
         height = start_height + i * height_step_size
+
         mean_time = mean_time_execution(solve_instance(args, points_count, width, height), step_repeat_count)
 
         show_result(*solve_instance(args, points_count, width, height)())

@@ -5,32 +5,15 @@ from bisect import bisect, insort
 from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Side import Side
 from src.solutions.models.Square import Square
-
-
-def max_elements(iterable: Iterable[any], key: Callable[[any], any]):
-    max_value = None
-    max_elems = []
-    for item in iterable:
-        item_value = key(item)
-        if max_value is None or item_value > max_value:
-            max_value = item_value
-            max_elems = [item]
-
-        elif item_value >= max_value:
-            max_elems.append(item)
-
-    return max_elems
-
-
-def flatten(iterable: Iterable[any]) -> Iterable[any]:
-    return [item for sublist in iterable for item in sublist]
+from src.solutions.utils.flatten import flatten
+from src.solutions.utils.max_elements import max_elements
 
 
 def _square_area(square_list: [Square]) -> int:
     return square_list[0].area() if square_list else 0
 
 
-class PointsSolution:
+class InsideOutResolver:
     def __init__(self, square: Square, points: Set[Tuple[int, int]]):
         self.points = points
         self.square = square
@@ -91,19 +74,15 @@ class PointsSolution:
 
     def _is_point_on_side(self, side: Side, square: Square) -> bool:
         if side.is_vertical():
-            points_with_same_cord_as_side = self.y_to_point_map[square.get_border_value(side)]
-            next_larger_point_index = bisect(points_with_same_cord_as_side, square.left_border)
+            points_with_same_y_cord_as_side = self.y_to_point_map[square.get_border_value(side)]
+            next_larger_point_index = bisect(points_with_same_y_cord_as_side, square.left_border)
 
-            return points_with_same_cord_as_side[next_larger_point_index] < square.right_border
+            return points_with_same_y_cord_as_side[next_larger_point_index] < square.right_border
 
-        points_with_same_cord_as_side = self.x_to_point_map[square.get_border_value(side)]
-        next_larger_point_index = bisect(points_with_same_cord_as_side, square.bottom_border)
-        try:
-            points_with_same_cord_as_side[next_larger_point_index] < square.top_border
-        except:
-            print('here')
+        points_with_same_x_cord_as_side = self.x_to_point_map[square.get_border_value(side)]
+        next_larger_point_index = bisect(points_with_same_x_cord_as_side, square.bottom_border)
 
-        return points_with_same_cord_as_side[next_larger_point_index] < square.top_border
+        return points_with_same_x_cord_as_side[next_larger_point_index] < square.top_border
 
     def _extend_side(self, side: Side, square: Square) -> Square:
         current_square = square

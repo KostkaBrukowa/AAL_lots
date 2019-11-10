@@ -65,9 +65,9 @@ insort - https://docs.python.org/2/library/bisect.html
 │   └── tablemode
 │       ├── Analizer.py
 └── solutions - pliki związane z rozwiązaniami problemu
-    ├── BruteForceSolution.py - klasa rozwiącująca problem metodą brute force
-    ├── PointsSolution.py - klasa rozwiącująca problem metodą Inside out
-    ├── Solution.py - klasa rozwiącująca problem metodą Outside in
+    ├── BruteForceResolver.py - klasa rozwiącująca problem metodą brute force
+    ├── InsideOutResolver.py - klasa rozwiącująca problem metodą Inside out
+    ├── OutsideInResolver.py - klasa rozwiącująca problem metodą Outside in
     └── models
         ├── FixedDeque.py - pomocnicza struktura danych używana w rozwiązaniu Outside in 
         ├── PointsQueue.py - pomocnicza klasa do rozwiązania problemu Outside in

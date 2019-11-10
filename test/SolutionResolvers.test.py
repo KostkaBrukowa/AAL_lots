@@ -2,9 +2,9 @@ import random
 import unittest
 from parameterized import parameterized
 
-from src.solutions.BruteForceSolution import BruteForceSolution
-from src.solutions.PointsSolution import PointsSolution
-from src.solutions.Solution import Solution
+from src.solutions.BruteForceResolver import BruteForceResolver
+from src.solutions.InsideOutResolver import InsideOutResolver
+from src.solutions.OutsideInResolver import OutsideInResolver
 from src.solutions.models.Square import Square
 from src.data.random_generator.random_problem import generate_problem
 
@@ -12,7 +12,7 @@ from src.data.random_generator.random_problem import generate_problem
 def random_brute_force_problem():
     random.seed(51)
     square, points = generate_problem(5, 5, 7)
-    return points, square, BruteForceSolution(square, points).compute_solution()
+    return points, square, BruteForceResolver(square, points).compute_solution()
 
 
 brute_force_cases = [
@@ -44,9 +44,9 @@ test_cases = [
 
 class MyTestCase(unittest.TestCase):
     @parameterized.expand(brute_force_cases)
-    def _test_brute_force_resolver(self, points, square, solution):
+    def test_brute_force_resolver(self, points, square, solution):
         # given
-        resolver = BruteForceSolution(square.copy(), points)
+        resolver = BruteForceResolver(square.copy(), points)
 
         # when
         computed_solution = resolver.compute_solution()
@@ -55,9 +55,9 @@ class MyTestCase(unittest.TestCase):
         self.assertCountEqual(computed_solution, solution)
 
     @parameterized.expand(test_cases)
-    def _test_border_resolver(self, points, square, solution):
+    def test_border_resolver(self, points, square, solution):
         # given
-        resolver = Solution(square.copy(), points)
+        resolver = OutsideInResolver(square.copy(), points)
 
         # when
         computed_solution = resolver.compute_solution()
@@ -68,7 +68,7 @@ class MyTestCase(unittest.TestCase):
     @parameterized.expand(test_cases)
     def test_points_resolver(self, points, square, solution):
         # given
-        resolver = PointsSolution(square.copy(), points)
+        resolver = InsideOutResolver(square.copy(), points)
 
         # when
         computed_solution = resolver.compute_solution()
