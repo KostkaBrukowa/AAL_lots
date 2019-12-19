@@ -4,7 +4,6 @@ from parameterized import parameterized
 
 from src.solutions.BruteForceResolver import BruteForceResolver
 from src.solutions.InsideOutResolver import InsideOutResolver
-from src.solutions.OutsideInResolver import OutsideInResolver
 from src.solutions.models.Square import Square
 from src.data.random_generator.random_problem import generate_problem
 
@@ -47,17 +46,6 @@ class MyTestCase(unittest.TestCase):
     def test_brute_force_resolver(self, points, square, solution):
         # given
         resolver = BruteForceResolver(square.copy(), points)
-
-        # when
-        computed_solution = resolver.compute_solution()
-
-        # then
-        self.assertCountEqual(computed_solution, solution)
-
-    @parameterized.expand(test_cases)
-    def test_border_resolver(self, points, square, solution):
-        # given
-        resolver = OutsideInResolver(square.copy(), points)
 
         # when
         computed_solution = resolver.compute_solution()

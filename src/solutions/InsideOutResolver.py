@@ -2,11 +2,11 @@ from collections import defaultdict
 from typing import Set, Tuple, Iterable, Callable
 from bisect import bisect, insort
 
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Side import Side
 from src.solutions.models.Square import Square
 from src.solutions.utils.flatten import flatten
 from src.solutions.utils.max_elements import max_elements
+from src.solutions.utils.types import Point
 
 
 def _square_area(square_list: [Square]) -> int:

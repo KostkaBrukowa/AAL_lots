@@ -1,8 +1,9 @@
 from typing import Set
 
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
 import matplotlib.pyplot as plt
+
+from src.solutions.utils.types import Point
 
 
 def draw_points(points_set: Set[Point]):

@@ -5,16 +5,13 @@ from src.data.plots.DrawSolution import show_result
 from src.data.random_generator.random_problem import generate_problem
 from src.solutions.BruteForceResolver import BruteForceResolver
 from src.solutions.InsideOutResolver import InsideOutResolver
-from src.solutions.OutsideInResolver import OutsideInResolver
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
+from src.solutions.utils.types import Point
 
 
 def compute_solution(args, square: Square, points: Set[Point]) -> [Square]:
     if args['bt']:
         return BruteForceResolver(square, points).compute_solution()
-    if args['oi']:
-        return OutsideInResolver(square, points).compute_solution()
     if args['io']:
         return InsideOutResolver(square, points).compute_solution()
 

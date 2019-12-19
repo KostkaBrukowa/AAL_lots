@@ -2,10 +2,10 @@ from typing import Set
 
 from itertools import permutations
 
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
 from src.solutions.utils.is_square_a_lot import is_square_lot
 from src.solutions.utils.max_elements import max_elements
+from src.solutions.utils.types import Point
 
 
 def generate_points_on_border(horizontal_side, vertical_side):

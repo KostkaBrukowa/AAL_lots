@@ -1,7 +1,7 @@
 from typing import Set
 
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
+from src.solutions.utils.types import Point
 
 
 def is_square_lot(points: Set[Point], square: Square):

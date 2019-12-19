@@ -1,0 +1,1 @@
+left 0 right 50 bottom 8 top 10 area 100

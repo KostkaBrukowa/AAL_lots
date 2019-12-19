@@ -26,7 +26,6 @@ Jarosław Glegoła
 
 ### Wybór algorytmu:
 1. -bt - problem będzie rozwiązywany metododą brute force
-2. -oi - problem będzie rozwiązywany metododą outside in
 3. -io - problem będzie rozwiązywany metododą inside out
 
 ## Rozwiązanie problemu
@@ -35,9 +34,7 @@ Szczegółowe informacje w dokumentacji
 Do rozwiązania problemu użyłem trzech sposobów:
 1. Brute force - z pośród wszystkich dostępnych spełniających wymagania 1,2,4 wyszukaj największy z nich, który spełnia
 wymaganie 3
-2. Outside in - zaczynając od największego prostokąta, przesuwaj jego krawędzie do środka tym, samym zmniejszając jego powierzchnię
-znajdz. Jeżeli aktualny prostokąt jest działką zapamiętaj i szukaj dalej. Zwróć największą działkę
-3. Inside out - dla każdego punktu z P znajdz dla niego największą działkę która zawiera go w sobie
+2. Inside out - dla każdego punktu z P znajdz dla niego największą działkę która zawiera go w sobie
 
 ## Algorytmy i struktury danych
 ### Struktury danych
@@ -67,10 +64,7 @@ insort - https://docs.python.org/2/library/bisect.html
 └── solutions - pliki związane z rozwiązaniami problemu
     ├── BruteForceResolver.py - klasa rozwiącująca problem metodą brute force
     ├── InsideOutResolver.py - klasa rozwiącująca problem metodą Inside out
-    ├── OutsideInResolver.py - klasa rozwiącująca problem metodą Outside in
     └── models
-        ├── FixedDeque.py - pomocnicza struktura danych używana w rozwiązaniu Outside in 
-        ├── PointsQueue.py - pomocnicza klasa do rozwiązania problemu Outside in
         ├── Side.py - enum reprezentujący poszczególne boki prostokąta
         ├── Square.py - klasa reprezentująca prostokąt
 ```

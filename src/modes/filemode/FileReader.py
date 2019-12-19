@@ -1,7 +1,7 @@
 from typing import Set, Tuple
 
-from src.solutions.models.PointsQueue import Point
 from src.solutions.models.Square import Square
+from src.solutions.utils.types import Point
 
 
 def parse_square(square_str: str) -> Square:
@@ -31,4 +31,6 @@ def read_file(filename: str) -> Tuple[Square, Set[Point]]:
 def save_result_to_file(squares: [Square], filename='output.txt', ):
     with open(filename, "w+") as file:
         for square in squares:
-            file.write(f"{str(square)}\n")
+            square_str = f"{str(square)}\n"
+            file.write(square_str)
+            print(square_str)
